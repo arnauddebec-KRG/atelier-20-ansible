@@ -1,0 +1,45 @@
+---
+
+# inside playbook.yml
+
+- name: Some tasks samples
+  hosts: all
+  
+  tasks:
+
+  # The name is printed during the task execution
+  - name: Make sure apache2 is installed with the latest version
+    # yum is a module known by Ansible, https://docs.ansible.com/ansible/latest/collections/ansible/builtin/yum_module.html
+    yum:
+      # below we use keywords of yum module
+      name: httpd
+      state: latest
+
+  - name: Ensure the JBoss memory settings are exactly as needed
+    # Manage lines in text files
+    lineinfile:
+      # search in the target host file
+      path: /opt/jboss-as/bin/standalone.conf
+      # a regex
+      regexp: '^(.*)Xms(\d+)m(.*)$'
+      # an make sure it has the right value
+      line: '\1Xms${xms}m\3'
+      backrefs: yes
+
+  - name: Get some current prices
+    uri:
+      url: https://api.coindesk.com/v1/bpi/currentprice.json
+      method: GET
+      body_format: form-urlencoded
+      status_code: 200
+    # if the request does not return 200, retries 10 times (example: timeout)
+    retries: 10
+    # if the request fails, wait 30sec before retrying
+    delay: 30
+    # if the request success, save the result into a variable
+    register: prices
+
+  - name: Print variable when variable is defined
+    debug:
+      var: prices
+    when: prices.json.bpi is defined

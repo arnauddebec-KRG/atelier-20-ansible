@@ -1,0 +1,12 @@
+---
+
+# inside playbook.yml
+
+- name: Install some stuff on all hosts
+  hosts: all
+  
+  tasks:
+  - name: Make sure apache2 is installed
+    yum:
+      name: httpd
+      state: latest

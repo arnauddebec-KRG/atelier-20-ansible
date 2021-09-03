@@ -1,0 +1,11 @@
+---
+
+# inside inventory.yml
+
+all:
+  hosts:
+    my_container01:
+      ansible_port: 2222
+      ansible_host: localhost
+      ansible_user: root
+      ansible_password: passw0rd

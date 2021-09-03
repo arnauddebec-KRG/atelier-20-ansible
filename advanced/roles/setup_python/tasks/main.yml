@@ -1,0 +1,5 @@
+---
+
+- name: "Install python"
+  yum:
+    name: "python{{ python_version }}"

@@ -1,0 +1,12 @@
+---
+
+# inside playbook.yml
+
+- name: Update security packages
+  hosts: all
+  
+  tasks:
+  - name: Ensure security packages are installed
+    yum:
+      security: yes
+      state: latest
